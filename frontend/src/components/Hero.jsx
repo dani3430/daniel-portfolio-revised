@@ -83,9 +83,14 @@ export default function Hero() {
             aria-hidden="true"
           />
           <div className="relative aspect-[4/5] overflow-hidden rounded-3xl border border-line bg-surface">
-            <div className="flex h-full items-center justify-center font-display text-7xl font-bold text-brand">
-              DT
-            </div>
+                       <img
+              src="/profile.png"
+              alt="Portrait of Daniel Temesgen"
+              width="600"
+              height="600"
+              fetchPriority="high"
+              className="h-full w-full object-cover object-top"
+            />
           </div>
 
           <div

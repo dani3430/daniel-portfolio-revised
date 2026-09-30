@@ -21,9 +21,28 @@ export default function Navbar() {
   return (
     <header className="sticky top-0 z-40 border-b border-line bg-bg/80 backdrop-blur">
       <nav className="mx-auto flex h-16 max-w-6xl items-center justify-between px-4" aria-label="Main">
-        {/* Placeholder brand: will be replaced by the real logo later */}
-        <Link to="/" className="font-display text-lg font-bold text-fg" onClick={() => setOpen(false)}>
-          Daniel Temesgen
+                <Link
+          to="/"
+          className="group flex items-center gap-2.5 rounded-md focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-brand"
+          onClick={() => setOpen(false)}
+        >
+          {/* Light-mode symbol (hidden in dark mode) */}
+          <img
+            src="/mark-light.png"
+            alt=""
+            width="232"
+            height="192"
+            className="h-9 w-auto transition-transform duration-300 group-hover:scale-105 motion-reduce:transition-none dark:hidden"
+          />
+          {/* Dark-mode symbol (hidden in light mode) */}
+          <img
+            src="/mark-dark.png"
+            alt=""
+            width="232"
+            height="192"
+            className="hidden h-9 w-auto transition-transform duration-300 group-hover:scale-105 motion-reduce:transition-none dark:block"
+          />
+          <span className="font-display text-lg font-bold text-fg">Daniel Temesgen</span>
         </Link>
 
         {/* Desktop links */}
