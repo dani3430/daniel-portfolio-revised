@@ -1,18 +1,24 @@
-import ThemeToggle from './components/ThemeToggle'
+import { Routes, Route } from 'react-router-dom'
+import PublicLayout from './layouts/PublicLayout'
+import Home from './pages/Home'
+import About from './pages/About'
+import Projects from './pages/Projects'
+import Blog from './pages/Blog'
+import Contact from './pages/Contact'
+import NotFound from './pages/NotFound'
 
 function App() {
   return (
-    <main className="flex min-h-screen items-center justify-center bg-bg p-6">
-      <div className="fixed right-4 top-4">
-        <ThemeToggle />
-      </div>
-
-      <div className="rounded-2xl border border-line bg-surface p-8 text-center shadow-lg">
-        <h1 className="font-display text-3xl font-bold text-fg">Daniel Temesgen</h1>
-        <p className="mt-2 text-lg font-medium text-brand">Full-Stack Software Developer</p>
-        <p className="mt-4 text-sm text-muted">Theme toggle is working.</p>
-      </div>
-    </main>
+    <Routes>
+      <Route element={<PublicLayout />}>
+        <Route path="/" element={<Home />} />
+        <Route path="/about" element={<About />} />
+        <Route path="/projects" element={<Projects />} />
+        <Route path="/blog" element={<Blog />} />
+        <Route path="/contact" element={<Contact />} />
+        <Route path="*" element={<NotFound />} />
+      </Route>
+    </Routes>
   )
 }
 
