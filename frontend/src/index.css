@@ -86,3 +86,25 @@ body {
 .animate-float {
   animation: float 5s ease-in-out infinite;
 }
+
+/* Scroll reveal: sections start slightly lower and transparent, then fade in */
+.reveal {
+  opacity: 0;
+  transform: translateY(24px);
+  transition:
+    opacity 0.7s ease-out,
+    transform 0.7s ease-out;
+}
+
+.reveal.is-visible {
+  opacity: 1;
+  transform: translateY(0);
+}
+
+/* Users who prefer reduced motion see everything immediately */
+@media (prefers-reduced-motion: reduce) {
+  .reveal {
+    opacity: 1;
+    transform: none;
+  }
+}
