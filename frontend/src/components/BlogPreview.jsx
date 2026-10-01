@@ -1,11 +1,14 @@
 import { Link } from 'react-router-dom'
 import SectionHeading from './SectionHeading'
-
-// Temporary content: this will come from the database later.
-// An empty list shows the "coming soon" message below.
-const latestPosts = []
+import BlogCard from './BlogCard'
+import { posts } from '../data/posts'
 
 export default function BlogPreview() {
+  // The three newest posts
+  const latestPosts = [...posts]
+    .sort((a, b) => new Date(b.date) - new Date(a.date))
+    .slice(0, 3)
+
   return (
     <section aria-labelledby="blog-heading" className="border-t border-line">
       <div className="mx-auto max-w-6xl px-4 py-16 md:py-24">
@@ -35,18 +38,9 @@ export default function BlogPreview() {
             </p>
           </div>
         ) : (
-          <div className="mt-10 grid gap-6 md:grid-cols-3">
+          <div className="mt-10 grid gap-6 md:grid-cols-2 lg:grid-cols-3">
             {latestPosts.map((post) => (
-              <article
-                key={post.id}
-                className="rounded-2xl border border-line bg-surface p-6 transition-colors hover:border-brand"
-              >
-                <p className="text-xs font-medium uppercase tracking-wide text-brand">
-                  {post.category}
-                </p>
-                <h3 className="mt-2 font-display text-lg font-semibold text-fg">{post.title}</h3>
-                <p className="mt-2 text-sm text-muted">{post.excerpt}</p>
-              </article>
+              <BlogCard key={post.id} post={post} />
             ))}
           </div>
         )}
