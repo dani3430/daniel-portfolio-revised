@@ -1,32 +1,12 @@
 import { Link } from 'react-router-dom'
 import SectionHeading from './SectionHeading'
 import ProjectCard from './ProjectCard'
-
-// Temporary content: this will come from the admin dashboard later
-const featuredProjects = [
-  {
-    id: 1,
-    title: 'Addis Eats',
-    description:
-      'A food ordering application where customers can browse meals and place orders, built as a modern e-commerce experience.',
-    image: '',
-    tech: ['HTML', 'CSS', 'JavaScript', 'React', 'Next.js'],
-    githubUrl: '',
-    liveUrl: '',
-  },
-  {
-    id: 2,
-    title: 'Automated Competitor Monitoring Dashboard',
-    description:
-      'A dashboard that uses web scraping to automatically track competitors and present the results in one clear view.',
-    image: '',
-    tech: ['HTML', 'CSS', 'Python', 'Web scraping'],
-    githubUrl: '',
-    liveUrl: '',
-  },
-]
+import { projects } from '../data/projects'
 
 export default function FeaturedProjects() {
+  // Only show projects marked as featured
+  const featuredProjects = projects.filter((project) => project.featured)
+
   return (
     <section aria-labelledby="projects-heading" className="border-t border-line">
       <div className="mx-auto max-w-6xl px-4 py-16 md:py-24">
