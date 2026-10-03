@@ -1,4 +1,5 @@
 import Link from 'next/link'
+import DownloadCvButton from './DownloadCvButton'
 
 // Temporary content: this will come from the admin dashboard later
 const profile = {
@@ -51,10 +52,10 @@ export default function Hero() {
               href="/contact"
               className="rounded-lg border border-line bg-surface px-6 py-3 text-sm font-semibold text-fg transition-colors hover:border-brand hover:text-brand focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-brand"
             >
-              Contact Me
+                           Contact Me
             </Link>
+            <DownloadCvButton />
           </div>
-
           <ul
             className="animate-fade-up mt-10 flex flex-wrap gap-2"
             style={{ animationDelay: '500ms' }}

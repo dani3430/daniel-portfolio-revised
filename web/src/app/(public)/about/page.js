@@ -2,6 +2,7 @@ import SectionHeading from '@/components/SectionHeading'
 import Skills from '@/components/Skills'
 import ContactCta from '@/components/ContactCta'
 import Reveal from '@/components/Reveal'
+import DownloadCvButton from '@/components/DownloadCvButton'
 
 export const metadata = {
   title: 'About | Daniel Temesgen',
@@ -86,11 +87,12 @@ export default function AboutPage() {
               title="Daniel Temesgen"
               description="Full-Stack Software Developer"
             />
-            <div className="mt-6 space-y-4 text-base leading-relaxed text-muted">
+                        <div className="mt-6 space-y-4 text-base leading-relaxed text-muted">
               {journey.map((text) => (
                 <p key={text}>{text}</p>
               ))}
             </div>
+            <DownloadCvButton variant="primary" className="mt-8" />
           </div>
         </div>
       </section>

@@ -4,6 +4,7 @@ import { useState } from 'react'
 import Link from 'next/link'
 import { usePathname } from 'next/navigation'
 import ThemeToggle from './ThemeToggle'
+import DownloadCvButton from './DownloadCvButton'
 
 const links = [
   { href: '/', label: 'Home' },
@@ -30,10 +31,13 @@ export default function Navbar() {
 
   return (
     <header className="sticky top-0 z-40 border-b border-line bg-bg/80 backdrop-blur">
-      <nav className="mx-auto flex h-16 max-w-6xl items-center justify-between px-4" aria-label="Main">
+      <nav
+        className="mx-auto flex h-16 max-w-6xl items-center justify-between gap-3 px-4"
+        aria-label="Main"
+      >
         <Link
           href="/"
-          className="group flex items-center gap-2.5 rounded-md focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-brand"
+          className="group flex shrink-0 items-center gap-2 rounded-md focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-brand sm:gap-2.5"
           onClick={() => setOpen(false)}
         >
           {/* Light-mode symbol (hidden in dark mode) */}
@@ -42,7 +46,7 @@ export default function Navbar() {
             alt=""
             width="232"
             height="192"
-            className="h-9 w-auto transition-transform duration-300 group-hover:scale-105 motion-reduce:transition-none dark:hidden"
+            className="h-8 w-auto transition-transform duration-300 group-hover:scale-105 motion-reduce:transition-none sm:h-9 dark:hidden"
           />
           {/* Dark-mode symbol (hidden in light mode) */}
           <img
@@ -50,9 +54,11 @@ export default function Navbar() {
             alt=""
             width="232"
             height="192"
-            className="hidden h-9 w-auto transition-transform duration-300 group-hover:scale-105 motion-reduce:transition-none dark:block"
+            className="hidden h-8 w-auto transition-transform duration-300 group-hover:scale-105 motion-reduce:transition-none sm:h-9 dark:block"
           />
-          <span className="font-display text-lg font-bold text-fg">Daniel Temesgen</span>
+          <span className="whitespace-nowrap font-display text-base font-bold text-fg sm:text-lg">
+            Daniel Temesgen
+          </span>
         </Link>
 
         {/* Desktop links */}
@@ -61,7 +67,11 @@ export default function Navbar() {
             const active = isActive(pathname, l.href)
             return (
               <li key={l.href}>
-                <Link href={l.href} aria-current={active ? 'page' : undefined} className={linkClass(active)}>
+                <Link
+                  href={l.href}
+                  aria-current={active ? 'page' : undefined}
+                  className={linkClass(active)}
+                >
                   {l.label}
                 </Link>
               </li>
@@ -69,7 +79,12 @@ export default function Navbar() {
           })}
         </ul>
 
-        <div className="flex items-center gap-2">
+        <div className="flex shrink-0 items-center gap-2">
+          {/* The wrapper is hidden below large screens, so the button never crowds the phone navbar */}
+          <div className="hidden lg:block">
+            <DownloadCvButton variant="primary" compact />
+          </div>
+
           <ThemeToggle />
 
           {/* Mobile menu button */}
@@ -81,7 +96,16 @@ export default function Navbar() {
             aria-label={open ? 'Close menu' : 'Open menu'}
             className="inline-flex h-10 w-10 items-center justify-center rounded-full border border-line bg-surface text-fg md:hidden focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-brand"
           >
-            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" aria-hidden="true">
+            <svg
+              width="20"
+              height="20"
+              viewBox="0 0 24 24"
+              fill="none"
+              stroke="currentColor"
+              strokeWidth="2"
+              strokeLinecap="round"
+              aria-hidden="true"
+            >
               {open ? <path d="M6 6l12 12M18 6L6 18" /> : <path d="M4 7h16M4 12h16M4 17h16" />}
             </svg>
           </button>
@@ -106,6 +130,9 @@ export default function Navbar() {
               </li>
             )
           })}
+          <li className="pt-3">
+            <DownloadCvButton variant="secondary" className="w-full" />
+          </li>
         </ul>
       )}
     </header>

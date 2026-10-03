@@ -1,5 +1,7 @@
 import Link from 'next/link'
 import SocialLinks from './SocialLinks'
+import DownloadCvButton from './DownloadCvButton'
+import { cv } from '@/data/cv'
 
 const links = [
   { href: '/', label: 'Home' },
@@ -53,7 +55,12 @@ export default function Footer() {
                   {l.label}
                 </Link>
               </li>
-            ))}
+                        ))}
+            {(cv.published || process.env.NODE_ENV === 'development') && (
+              <li>
+                <DownloadCvButton variant="link" />
+              </li>
+            )}
           </ul>
         </nav>
 

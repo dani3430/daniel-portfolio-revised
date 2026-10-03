@@ -1,7 +1,8 @@
 import SectionHeading from '@/components/SectionHeading'
 import ContactForm from '@/components/ContactForm'
 import { contactLinks } from '@/data/contact'
-
+import DownloadCvButton from '@/components/DownloadCvButton'
+import { cv } from '@/data/cv'
 export const metadata = {
   title: 'Contact | Daniel Temesgen',
   description:
@@ -44,7 +45,12 @@ export default function ContactPage() {
                   </a>
                 </li>
               )
-            })}
+                        })}
+            {(cv.published || process.env.NODE_ENV === 'development') && (
+              <li>
+                <DownloadCvButton variant="secondary" className="w-full" />
+              </li>
+            )}
           </ul>
         </div>
       </div>
