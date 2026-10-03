@@ -1,5 +1,6 @@
 import { Inter, Space_Grotesk } from 'next/font/google'
 import './globals.css'
+import FlowerBackground from '@/components/FlowerBackground'
 
 // Fonts are downloaded at build time and served from your own site (faster, more private)
 const inter = Inter({ subsets: ['latin'], variable: '--font-inter', display: 'swap' })
@@ -38,7 +39,10 @@ export default function RootLayout({ children }) {
       <head>
         <script dangerouslySetInnerHTML={{ __html: themeScript }} />
       </head>
-      <body>{children}</body>
+           <body>
+        <FlowerBackground />
+        {children}
+      </body>
     </html>
   )
 }

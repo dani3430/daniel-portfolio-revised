@@ -108,3 +108,65 @@ body {
     transform: none;
   }
 }
+
+/* Flower background: slow, faint flowers drifting upward behind the content */
+:root {
+  --flower-a: #10b981;
+  --flower-b: #38bdf8;
+}
+
+.dark {
+  --flower-a: #34d399;
+  --flower-b: #38bdf8;
+}
+
+.flower-layer {
+  position: fixed;
+  inset: 0;
+  z-index: -10;
+  overflow: hidden;
+  pointer-events: none;
+}
+
+.flower {
+  position: absolute;
+  bottom: -80px;
+  opacity: 0;
+  animation: flower-float linear infinite;
+  will-change: transform, opacity;
+}
+
+.flower-a {
+  color: var(--flower-a);
+}
+
+.flower-b {
+  color: var(--flower-b);
+}
+
+@keyframes flower-float {
+  0% {
+    transform: translate3d(0, 0, 0) rotate(0deg);
+    opacity: 0;
+  }
+  10% {
+    opacity: var(--o);
+  }
+  50% {
+    transform: translate3d(var(--sway), -55vh, 0) rotate(180deg);
+  }
+  90% {
+    opacity: var(--o);
+  }
+  100% {
+    transform: translate3d(0, -115vh, 0) rotate(360deg);
+    opacity: 0;
+  }
+}
+
+/* No flowers at all for visitors who prefer reduced motion */
+@media (prefers-reduced-motion: reduce) {
+  .flower-layer {
+    display: none;
+  }
+}
