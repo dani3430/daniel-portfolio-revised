@@ -75,6 +75,7 @@ export default function ContactForm() {
   const [values, setValues] = useState(initialValues)
   const [errors, setErrors] = useState({})
   const [status, setStatus] = useState('idle') // idle | submitting | success | error
+  const [errorMessage, setErrorMessage] = useState('')
 
   function handleChange(event) {
     const { name, value } = event.target
@@ -106,8 +107,19 @@ export default function ContactForm() {
       await sendContactMessage(values)
       setValues(initialValues)
       setStatus('success')
-    } catch {
-      setStatus('error')
+            } catch (error) {
+      if (error.fieldErrors) {
+        // The server found a problem with specific fields: show them next to the fields
+        setErrors(error.fieldErrors)
+        setStatus('idle')
+      } else {
+        setErrorMessage(
+          error.status === 429
+            ? error.message
+            : 'Sorry, your message could not be sent. Please try again, or contact me directly using the links on this page.',
+        )
+        setStatus('error')
+      }
     }
   }
 
@@ -200,10 +212,9 @@ export default function ContactForm() {
         <input id="website" name="website" tabIndex={-1} autoComplete="off" value={values.website} onChange={handleChange} />
       </div>
 
-      {status === 'error' && (
+            {status === 'error' && (
         <p role="alert" className="rounded-lg border border-red-500 px-4 py-3 text-sm text-red-600 dark:text-red-400">
-          Sorry, your message could not be sent. Please try again, or contact me directly using the
-          links on this page.
+          {errorMessage}
         </p>
       )}
 
