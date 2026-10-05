@@ -1,6 +1,7 @@
 import { createHash } from 'node:crypto'
 import { getSql } from '@/lib/db'
 import { validateContact } from '@/lib/contactValidation'
+import { sendOwnerNotification, sendAutoReply } from '@/lib/email'
 
 const MAX_BODY_BYTES = 10_000
 const MAX_MESSAGES_PER_HOUR = 3
@@ -57,8 +58,10 @@ export async function POST(request) {
     return json({ error: 'Please check the form.', errors }, 400)
   }
 
+  let sql
+  let messageId
   try {
-    const sql = getSql()
+    sql = getSql()
     const ipHash = hashIp(request)
 
     // Allow only a few messages per visitor per hour
@@ -71,18 +74,42 @@ export async function POST(request) {
     }
 
     // Save the message FIRST, before any notification can fail
-    await sql`
+    const inserted = await sql`
       INSERT INTO messages (name, email, subject, message, phone, company, ip_hash)
       VALUES (
         ${clean.name}, ${clean.email}, ${clean.subject}, ${clean.message},
         ${clean.phone || null}, ${clean.company || null}, ${ipHash}
       )
+      RETURNING id
     `
-
-    return json({ ok: true })
+    messageId = inserted[0].id
   } catch (error) {
     // Details go to the server log only, never to the visitor
     console.error('Contact form error:', error)
     return json({ error: 'Something went wrong. Please try again later.' }, 500)
   }
+
+  // The message is safe in the database. Now try the notifications.
+  // A failure here is recorded, but it never turns the visitor's success into an error.
+  try {
+    const [ownerResult, replyResult] = await Promise.allSettled([
+      sendOwnerNotification(clean),
+      sendAutoReply(clean),
+    ])
+
+    const emailNotified = ownerResult.status === 'fulfilled'
+    const autoreplySent = replyResult.status === 'fulfilled'
+    if (!emailNotified) console.error('Owner email failed:', ownerResult.reason)
+    if (!autoreplySent) console.error('Auto-reply failed:', replyResult.reason)
+
+    await sql`
+      UPDATE messages
+      SET email_notified = ${emailNotified}, autoreply_sent = ${autoreplySent}
+      WHERE id = ${messageId}
+    `
+  } catch (error) {
+    console.error('Notification step failed:', error)
+  }
+
+  return json({ ok: true })
 }
