@@ -8,6 +8,6 @@ if (!url) {
 
 const sql = neon(url)
 const rows = await sql.query(
-    'SELECT id, name, subject, status, email_notified, autoreply_sent, created_at FROM messages ORDER BY created_at DESC LIMIT 10',
+      'SELECT id, name, subject, status, email_notified, autoreply_sent, telegram_notified, created_at FROM messages ORDER BY created_at DESC LIMIT 10',
 )
 console.table(rows)

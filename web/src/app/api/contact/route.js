@@ -2,6 +2,7 @@ import { createHash } from 'node:crypto'
 import { getSql } from '@/lib/db'
 import { validateContact } from '@/lib/contactValidation'
 import { sendOwnerNotification, sendAutoReply } from '@/lib/email'
+import { sendTelegramNotification } from '@/lib/telegram'
 
 const MAX_BODY_BYTES = 10_000
 const MAX_MESSAGES_PER_HOUR = 3
@@ -91,25 +92,29 @@ export async function POST(request) {
 
   // The message is safe in the database. Now try the notifications.
   // A failure here is recorded, but it never turns the visitor's success into an error.
-  try {
-    const [ownerResult, replyResult] = await Promise.allSettled([
+    try {
+    const [ownerResult, replyResult, telegramResult] = await Promise.allSettled([
       sendOwnerNotification(clean),
       sendAutoReply(clean),
+      sendTelegramNotification(clean),
     ])
 
     const emailNotified = ownerResult.status === 'fulfilled'
     const autoreplySent = replyResult.status === 'fulfilled'
+    const telegramNotified = telegramResult.status === 'fulfilled'
     if (!emailNotified) console.error('Owner email failed:', ownerResult.reason)
     if (!autoreplySent) console.error('Auto-reply failed:', replyResult.reason)
+    if (!telegramNotified) console.error('Telegram notification failed:', telegramResult.reason)
 
     await sql`
       UPDATE messages
-      SET email_notified = ${emailNotified}, autoreply_sent = ${autoreplySent}
+      SET email_notified = ${emailNotified},
+          autoreply_sent = ${autoreplySent},
+          telegram_notified = ${telegramNotified}
       WHERE id = ${messageId}
     `
   } catch (error) {
     console.error('Notification step failed:', error)
   }
-
   return json({ ok: true })
 }
