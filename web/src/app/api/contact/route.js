@@ -94,7 +94,7 @@ export async function POST(request) {
   // A failure here is recorded, but it never turns the visitor's success into an error.
     try {
     const [ownerResult, replyResult, telegramResult] = await Promise.allSettled([
-      sendOwnerNotification(clean),
+           sendOwnerNotification({ ...clean, id: messageId }),
       sendAutoReply(clean),
       sendTelegramNotification(clean),
     ])

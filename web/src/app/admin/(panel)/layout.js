@@ -1,5 +1,7 @@
 import Link from 'next/link'
 import { requireAdmin } from '@/lib/auth'
+import { getSql } from '@/lib/db'
+import AdminNav from '@/components/admin/AdminNav'
 import { logoutAction } from '../actions'
 
 export const metadata = {
@@ -9,8 +11,19 @@ export const metadata = {
 
 export const dynamic = 'force-dynamic'
 
+async function getUnreadCount() {
+  try {
+    const rows = await getSql()`SELECT count(*)::int AS total FROM messages WHERE status = 'unread'`
+    return rows[0].total
+  } catch (error) {
+    console.error('Could not count unread messages:', error)
+    return 0
+  }
+}
+
 export default async function AdminLayout({ children }) {
   const admin = await requireAdmin()
+  const unreadCount = await getUnreadCount()
 
   return (
     <div className="min-h-screen">
@@ -39,6 +52,7 @@ export default async function AdminLayout({ children }) {
           </div>
         </div>
       </header>
+      <AdminNav unreadCount={unreadCount} />
       <main className="mx-auto max-w-6xl px-4 py-10">{children}</main>
     </div>
   )

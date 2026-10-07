@@ -38,6 +38,10 @@ function oneLine(value) {
 export async function sendOwnerNotification(data) {
   const transporter = createTransporter()
   const when = new Date().toUTCString()
+  
+  // Link to open this message in the admin dashboard (needs SITE_URL and the message id)
+  const siteUrl = (process.env.SITE_URL || '').replace(/\/+$/, '')
+  const adminLink = siteUrl && data.id ? `${siteUrl}/admin/messages/${data.id}` : ''
 
   const lines = [
     `Name: ${oneLine(data.name)}`,
@@ -47,8 +51,10 @@ export async function sendOwnerNotification(data) {
     data.company ? `Company: ${oneLine(data.company)}` : null,
     `Received: ${when}`,
     '',
-    'Message:',
+        'Message:',
     data.message,
+    adminLink ? '' : null,
+    adminLink ? `View in admin: ${adminLink}` : null,
   ].filter((line) => line !== null)
 
   const row = (label, value) =>
@@ -67,6 +73,7 @@ export async function sendOwnerNotification(data) {
       </table>
       <h3 style="margin:20px 0 8px">Message</h3>
       <div style="white-space:pre-wrap;font-size:14px;line-height:1.6;border-left:3px solid #047857;padding-left:12px">${escapeHtml(data.message)}</div>
+      ${adminLink ? `<p style="margin:20px 0 0"><a href="${escapeHtml(adminLink)}" style="display:inline-block;background:#047857;color:#ffffff;text-decoration:none;padding:10px 18px;border-radius:8px;font-size:14px">View in admin dashboard</a></p>` : ''}
       <p style="color:#64748b;font-size:12px;margin-top:24px">Press Reply to answer ${escapeHtml(oneLine(data.name))} directly.</p>
     </div>`
 
