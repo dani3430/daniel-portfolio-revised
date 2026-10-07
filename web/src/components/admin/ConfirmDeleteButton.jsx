@@ -16,7 +16,7 @@ function ConfirmButton() {
   )
 }
 
-export default function ConfirmDeleteButton({ id, action }) {
+export default function ConfirmDeleteButton({ id, action, itemName = 'message' }) {
   const [confirming, setConfirming] = useState(false)
 
   if (!confirming) {
@@ -35,7 +35,7 @@ export default function ConfirmDeleteButton({ id, action }) {
     <form action={action} className="flex flex-wrap items-center gap-2">
       <input type="hidden" name="id" value={id} />
       <p className="text-sm text-fg" role="alert">
-        Delete this message forever?
+        Delete this {itemName} forever?
       </p>
       <ConfirmButton />
       <button
