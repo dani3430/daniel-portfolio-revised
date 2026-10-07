@@ -1,10 +1,11 @@
 import Link from 'next/link'
 import SectionHeading from './SectionHeading'
 import BlogCard from './BlogCard'
-import { posts } from '@/data/posts'
+import { getPosts } from '@/lib/content'
 
-export default function BlogPreview() {
+export default async function BlogPreview() {
   // The three newest posts
+  const posts = await getPosts()
   const latestPosts = [...posts]
     .sort((a, b) => new Date(b.date) - new Date(a.date))
     .slice(0, 3)

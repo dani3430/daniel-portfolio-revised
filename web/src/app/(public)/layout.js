@@ -1,6 +1,9 @@
 import Navbar from '@/components/Navbar'
 import Footer from '@/components/Footer'
 
+// Refresh all public pages from the database at most once a minute
+export const revalidate = 60
+
 export default function PublicLayout({ children }) {
   return (
     <div className="flex min-h-screen flex-col">

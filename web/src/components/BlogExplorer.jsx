@@ -2,12 +2,11 @@
 
 import { useState } from 'react'
 import BlogCard from './BlogCard'
-import { posts, blogCategories } from '@/data/posts'
 
-const filters = ['All', ...blogCategories]
-
-export default function BlogExplorer() {
+export default function BlogExplorer({ posts, categories }) {
   const [activeFilter, setActiveFilter] = useState('All')
+
+  const filters = ['All', ...categories]
 
   // Newest posts first
   const sortedPosts = [...posts].sort((a, b) => new Date(b.date) - new Date(a.date))

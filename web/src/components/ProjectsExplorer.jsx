@@ -2,13 +2,12 @@
 
 import { useState } from 'react'
 import ProjectCard from './ProjectCard'
-import { projects, categories } from '@/data/projects'
 
-// Filter buttons: "All" plus every category, even those with no projects yet
-const filters = ['All', ...categories]
-
-export default function ProjectsExplorer() {
+export default function ProjectsExplorer({ projects, categories }) {
   const [activeFilter, setActiveFilter] = useState('All')
+
+  // Filter buttons: "All" plus every category, even those with no projects yet
+  const filters = ['All', ...categories]
 
   const visibleProjects =
     activeFilter === 'All'

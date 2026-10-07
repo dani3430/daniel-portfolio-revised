@@ -6,6 +6,9 @@ import BlogPreview from '@/components/BlogPreview'
 import ContactCta from '@/components/ContactCta'
 import Reveal from '@/components/Reveal'
 
+// Refresh this page from the database at most once a minute
+export const revalidate = 60
+
 export default function Home() {
   return (
     <>

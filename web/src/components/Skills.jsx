@@ -1,25 +1,9 @@
 import SectionHeading from './SectionHeading'
+import { getSkillGroups } from '@/lib/content'
 
-// Temporary content: this will come from the admin dashboard later
-const skillGroups = [
-  {
-    title: 'Frontend',
-    description: 'Fast, responsive and accessible interfaces.',
-    items: ['React.js', 'Next.js', 'JavaScript', 'HTML', 'CSS', 'Tailwind CSS'],
-  },
-  {
-    title: 'Backend',
-    description: 'Secure and well-structured server-side code.',
-    items: ['Node.js', 'Express.js', 'REST APIs'],
-  },
-  {
-    title: 'Data & Tools',
-    description: 'Storing data safely and shipping code reliably.',
-    items: ['Database technologies', 'Git & GitHub', 'Full-stack web development'],
-  },
-]
+export default async function Skills() {
+  const skillGroups = await getSkillGroups()
 
-export default function Skills() {
   return (
     <section aria-labelledby="skills-heading" className="border-t border-line">
       <div className="mx-auto max-w-6xl px-4 py-16 md:py-24">

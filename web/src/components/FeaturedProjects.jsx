@@ -1,10 +1,11 @@
 import Link from 'next/link'
 import SectionHeading from './SectionHeading'
 import ProjectCard from './ProjectCard'
-import { projects } from '@/data/projects'
+import { getProjects } from '@/lib/content'
 
-export default function FeaturedProjects() {
+export default async function FeaturedProjects() {
   // Only show projects marked as featured
+  const projects = await getProjects()
   const featuredProjects = projects.filter((project) => project.featured)
 
   return (

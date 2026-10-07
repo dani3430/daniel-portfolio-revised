@@ -1,20 +1,15 @@
 import Link from 'next/link'
 import { notFound } from 'next/navigation'
-import { posts } from '@/data/posts'
+import { getPost } from '@/lib/content'
 import { formatDate } from '@/utils/formatDate'
 
-// Only the slugs listed below exist; any other address shows a 404 page
-export const dynamicParams = false
-
-// Tells Next.js which post pages to build ahead of time
-export function generateStaticParams() {
-  return posts.map((post) => ({ slug: post.slug }))
-}
+// Refresh each post page from the database at most once a minute
+export const revalidate = 60
 
 // Gives every post its own browser tab title and search description
 export async function generateMetadata({ params }) {
   const { slug } = await params
-  const post = posts.find((p) => p.slug === slug)
+  const post = await getPost(slug)
   if (!post) return {}
 
   return {
@@ -26,8 +21,9 @@ export async function generateMetadata({ params }) {
 export default async function BlogPostPage({ params }) {
   // In current Next.js, params arrives as a promise, so we wait for it
   const { slug } = await params
-  const post = posts.find((p) => p.slug === slug)
+  const post = await getPost(slug)
 
+  // Unknown, draft or not-yet-scheduled posts show the 404 page
   if (!post) notFound()
 
   return (

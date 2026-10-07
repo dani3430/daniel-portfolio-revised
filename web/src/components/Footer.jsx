@@ -2,6 +2,7 @@ import Link from 'next/link'
 import SocialLinks from './SocialLinks'
 import DownloadCvButton from './DownloadCvButton'
 import { cv } from '@/data/cv'
+import { getSiteSettings } from '@/lib/content'
 
 const links = [
   { href: '/', label: 'Home' },
@@ -11,7 +12,9 @@ const links = [
   { href: '/contact', label: 'Contact' },
 ]
 
-export default function Footer() {
+export default async function Footer() {
+  const settings = await getSiteSettings()
+
   return (
     <footer className="border-t border-line">
       <div className="mx-auto grid max-w-6xl gap-10 px-4 py-12 sm:grid-cols-2 lg:grid-cols-3">
@@ -67,7 +70,7 @@ export default function Footer() {
         <div>
           <h2 className="text-sm font-semibold uppercase tracking-widest text-brand">Let&apos;s connect</h2>
           <p className="mt-4 text-sm leading-relaxed text-muted">
-            Open to freelance projects, collaboration and new opportunities in web development.
+            {settings.footer.text}
           </p>
           <Link
             href="/contact"

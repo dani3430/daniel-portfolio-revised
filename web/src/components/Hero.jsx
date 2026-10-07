@@ -1,16 +1,16 @@
 import Link from 'next/link'
 import DownloadCvButton from './DownloadCvButton'
 
-// Temporary content: this will come from the admin dashboard later
-const profile = {
-  name: 'Daniel Temesgen',
-  title: 'Full-Stack Software Developer',
-  intro:
-    'I build fast, secure and user-friendly web applications, from the database to the interface. Self-taught, curious, and focused on solving real problems with clean code.',
-  tech: ['React', 'Node.js', 'Express', 'JavaScript', 'Tailwind CSS', 'REST APIs'],
-}
+import { getProfile, getSiteSettings } from '@/lib/content'
 
-export default function Hero() {
+export default async function Hero() {
+  const [data, settings] = await Promise.all([getProfile(), getSiteSettings()])
+  const profile = {
+    name: data.name,
+    title: data.title,
+    intro: data.intro,
+    tech: settings.hero.tech,
+  }
   return (
     <section className="relative overflow-hidden">
       <div className="mx-auto grid max-w-6xl items-center gap-12 px-4 py-16 md:py-24 lg:grid-cols-2">

@@ -1,22 +1,10 @@
 import Link from 'next/link'
 import SectionHeading from './SectionHeading'
+import { getProfile } from '@/lib/content'
 
-// Temporary content: this will come from the admin dashboard later
-const about = {
-  paragraphs: [
-    'I am a self-taught full-stack developer with a strong passion for technology. I build modern web applications with React, Node.js and Express, and I care about clean code, security and a great user experience.',
-    'I graduated from Mekdela Amba University with a degree in Agribusiness and Value Chain Management. That background gives me a practical view of business problems, and I use it to build software that solves real needs.',
-  ],
-  interests: [
-    'Full-stack web development',
-    'SaaS products',
-    'Agritech',
-    'Business and marketing technology',
-    'Modern web applications',
-  ],
-}
+export default async function AboutPreview() {
+  const profile = await getProfile()
 
-export default function AboutPreview() {
   return (
     <section aria-labelledby="about-heading" className="border-t border-line">
       <div className="mx-auto grid max-w-6xl gap-10 px-4 py-16 md:py-24 lg:grid-cols-2 lg:gap-16">
@@ -27,7 +15,7 @@ export default function AboutPreview() {
             title="From agribusiness to software"
           />
           <div className="mt-6 space-y-4 text-base leading-relaxed text-muted">
-            {about.paragraphs.map((text) => (
+            {profile.bio.map((text) => (
               <p key={text}>{text}</p>
             ))}
           </div>
@@ -42,7 +30,7 @@ export default function AboutPreview() {
         <div className="rounded-2xl border border-line bg-surface p-6 sm:p-8">
           <h3 className="font-display text-lg font-semibold text-fg">Areas of interest</h3>
           <ul className="mt-5 space-y-3">
-            {about.interests.map((item) => (
+            {profile.interests.map((item) => (
               <li key={item} className="flex items-start gap-3 text-sm text-fg">
                 <span
                   className="mt-1.5 h-2 w-2 shrink-0 rounded-full bg-brand"

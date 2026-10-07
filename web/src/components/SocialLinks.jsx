@@ -1,4 +1,4 @@
-import { contactLinks } from '@/data/contact'
+import { getContactLinks } from '@/lib/content'
 
 // Simple outline icons, one per link label
 const icons = {
@@ -29,7 +29,9 @@ const icons = {
   ),
 }
 
-export default function SocialLinks({ className = '' }) {
+export default async function SocialLinks({ className = '' }) {
+  const contactLinks = await getContactLinks()
+
   return (
     <ul className={`flex flex-wrap gap-3 ${className}`} aria-label="Social links">
       {contactLinks.map((link) => {

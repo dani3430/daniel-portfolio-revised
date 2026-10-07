@@ -1,15 +1,18 @@
 import SectionHeading from '@/components/SectionHeading'
 import ContactForm from '@/components/ContactForm'
-import { contactLinks } from '@/data/contact'
 import DownloadCvButton from '@/components/DownloadCvButton'
+import { getContactLinks } from '@/lib/content'
 import { cv } from '@/data/cv'
+
 export const metadata = {
   title: 'Contact | Daniel Temesgen',
   description:
     'Get in touch with Daniel Temesgen, a full-stack software developer, about projects, job opportunities or collaboration.',
 }
 
-export default function ContactPage() {
+export default async function ContactPage() {
+  const contactLinks = await getContactLinks()
+
   return (
     <section aria-labelledby="contact-title">
       <div className="mx-auto max-w-6xl px-4 py-16 md:py-24">
@@ -45,7 +48,7 @@ export default function ContactPage() {
                   </a>
                 </li>
               )
-                        })}
+            })}
             {(cv.published || process.env.NODE_ENV === 'development') && (
               <li>
                 <DownloadCvButton variant="secondary" className="w-full" />
