@@ -8,6 +8,7 @@ const items = [
   { href: '/admin/messages', label: 'Messages' },
   { href: '/admin/projects', label: 'Projects' },
   { href: '/admin/blog', label: 'Blog' },
+  { href: '/admin/branding', label: 'Branding' },
 ]
 
 export default function AdminNav({ unreadCount = 0 }) {

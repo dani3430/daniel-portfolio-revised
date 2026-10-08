@@ -1,6 +1,7 @@
 import { Inter, Space_Grotesk } from 'next/font/google'
 import './globals.css'
 import FlowerBackground from '@/components/FlowerBackground'
+import { getBranding } from '@/lib/content'
 
 // Fonts are downloaded at build time and served from your own site (faster, more private)
 const inter = Inter({ subsets: ['latin'], variable: '--font-inter', display: 'swap' })
@@ -10,10 +11,16 @@ const spaceGrotesk = Space_Grotesk({
   display: 'swap',
 })
 
-export const metadata = {
-  title: 'Daniel Temesgen | Full-Stack Software Developer',
-  description:
-    'Personal portfolio of Daniel Temesgen, a full-stack software developer building modern web applications with React, Node.js and Express.',
+export async function generateMetadata() {
+  const branding = await getBranding()
+
+  return {
+    title: 'Daniel Temesgen | Full-Stack Software Developer',
+    description:
+      'Personal portfolio of Daniel Temesgen, a full-stack software developer building modern web applications with React, Node.js and Express.',
+    // Only set when you uploaded a favicon
+    ...(branding.favicon ? { icons: { icon: branding.favicon } } : {}),
+  }
 }
 
 // Applies the saved theme before the page paints, to avoid a white flash
@@ -39,7 +46,7 @@ export default function RootLayout({ children }) {
       <head>
         <script dangerouslySetInnerHTML={{ __html: themeScript }} />
       </head>
-           <body>
+      <body>
         <FlowerBackground />
         {children}
       </body>

@@ -25,7 +25,7 @@ function linkClass(active) {
   }`
 }
 
-export default function Navbar() {
+export default function Navbar({ marks = { light: '/mark-light.png', dark: '/mark-dark.png' } }) {
   const [open, setOpen] = useState(false)
   const pathname = usePathname()
 
@@ -42,7 +42,7 @@ export default function Navbar() {
         >
           {/* Light-mode symbol (hidden in dark mode) */}
           <img
-            src="/mark-light.png"
+           src={marks.light}
             alt=""
             width="232"
             height="192"
@@ -50,7 +50,7 @@ export default function Navbar() {
           />
           {/* Dark-mode symbol (hidden in light mode) */}
           <img
-            src="/mark-dark.png"
+           src={marks.dark}
             alt=""
             width="232"
             height="192"

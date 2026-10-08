@@ -1,10 +1,10 @@
 import Link from 'next/link'
 import DownloadCvButton from './DownloadCvButton'
 
-import { getProfile, getSiteSettings } from '@/lib/content'
+import { getProfile, getSiteSettings, getBranding } from '@/lib/content'
 
 export default async function Hero() {
-  const [data, settings] = await Promise.all([getProfile(), getSiteSettings()])
+ const [data, settings, branding] = await Promise.all([getProfile(), getSiteSettings(), getBranding()])
   const profile = {
     name: data.name,
     title: data.title,
@@ -83,7 +83,7 @@ export default async function Hero() {
           />
           <div className="relative aspect-[4/5] overflow-hidden rounded-3xl border border-line bg-surface">
             <img
-              src="/profile.png"
+             src={branding.profile}
               alt="Portrait of Daniel Temesgen"
               width="600"
               height="600"

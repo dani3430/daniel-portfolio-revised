@@ -8,6 +8,7 @@ import {
   categories as fallbackProjectCategories,
 } from '@/data/projects'
 import { contactLinks as fallbackContactLinks } from '@/data/contact'
+import { SLOTS, SLOT_KEYS } from '@/lib/brandingSlots'
 
 async function safely(label, read, fallback) {
   try {
@@ -297,5 +298,65 @@ export function getTimeline() {
       return rows.map((row) => ({ title: row.title, text: row.text }))
     },
     [],
+  )
+}
+
+
+// ---------------- BRANDING (logos, photo, favicon) ----------------
+
+// Cloudinary can resize and compress an image on the fly. These sizes keep pages light.
+const BRANDING_TRANSFORMS = {
+  mark_light: 'f_auto,q_auto,c_limit,h_192',
+  mark_dark: 'f_auto,q_auto,c_limit,h_192',
+  logo_light: 'f_auto,q_auto,c_limit,w_640',
+  logo_dark: 'f_auto,q_auto,c_limit,w_640',
+  profile: 'f_auto,q_auto,c_limit,w_900',
+}
+
+function optimizeImage(url, transform) {
+  const isCloudinary = url.startsWith('https://res.cloudinary.com/')
+  const isSvg = /\.svg($|\?)/i.test(url)
+  if (!transform || !isCloudinary || isSvg) return url
+  return url.replace('/image/upload/', `/image/upload/${transform}/`)
+}
+
+// Built-in images, used for any slot that has no upload
+const fallbackBranding = {
+  ...Object.fromEntries(SLOT_KEYS.map((key) => [key, SLOTS[key].fallback])),
+  favicon: null,
+}
+
+// The image address for each slot: your upload if there is one, otherwise the built-in file
+export function getBranding() {
+  return safely(
+    'branding',
+    async (sql) => {
+      const settings = await sql`SELECT value FROM site_settings WHERE key = 'branding'`
+      const assigned = settings[0]?.value ?? {}
+
+      const ids = SLOT_KEYS.map((key) => assigned[key]).filter(Boolean)
+      const files =
+        ids.length > 0
+          ? await sql`
+              SELECT id, url FROM media
+              WHERE id IN (SELECT (jsonb_array_elements_text(${JSON.stringify(ids)}::jsonb))::bigint)
+            `
+          : []
+      const urlById = new Map(files.map((file) => [String(file.id), file.url]))
+
+      const result = {}
+      for (const key of SLOT_KEYS) {
+        const uploaded = urlById.get(String(assigned[key]))
+        if (key === 'favicon') {
+          result[key] = uploaded ?? null
+        } else {
+          result[key] = uploaded
+            ? optimizeImage(uploaded, BRANDING_TRANSFORMS[key])
+            : SLOTS[key].fallback
+        }
+      }
+      return result
+    },
+    fallbackBranding,
   )
 }

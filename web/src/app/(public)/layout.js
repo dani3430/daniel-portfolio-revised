@@ -1,10 +1,13 @@
 import Navbar from '@/components/Navbar'
 import Footer from '@/components/Footer'
+import { getBranding } from '@/lib/content'
 
 // Refresh all public pages from the database at most once a minute
 export const revalidate = 60
 
-export default function PublicLayout({ children }) {
+export default async function PublicLayout({ children }) {
+  const branding = await getBranding()
+
   return (
     <div className="flex min-h-screen flex-col">
       {/* Lets keyboard users skip the navigation */}
@@ -14,7 +17,7 @@ export default function PublicLayout({ children }) {
       >
         Skip to content
       </a>
-      <Navbar />
+      <Navbar marks={{ light: branding.mark_light, dark: branding.mark_dark }} />
       <main id="main" className="flex-1">
         {children}
       </main>

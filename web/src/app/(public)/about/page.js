@@ -3,7 +3,7 @@ import Skills from '@/components/Skills'
 import ContactCta from '@/components/ContactCta'
 import Reveal from '@/components/Reveal'
 import DownloadCvButton from '@/components/DownloadCvButton'
-import { getProfile, getEducation, getTimeline } from '@/lib/content'
+import { getProfile, getEducation, getTimeline, getBranding } from '@/lib/content'
 
 export const metadata = {
   title: 'About | Daniel Temesgen',
@@ -12,10 +12,11 @@ export const metadata = {
 }
 
 export default async function AboutPage() {
-  const [profile, education, timeline] = await Promise.all([
+ const [profile, education, timeline, branding] = await Promise.all([
     getProfile(),
     getEducation(),
-    getTimeline(),
+   getTimeline(), 
+   getBranding(),
   ])
 
   return (
@@ -26,7 +27,7 @@ export default async function AboutPage() {
           <div className="mx-auto w-48 sm:w-56 lg:mx-0 lg:w-full">
             <div className="aspect-[4/5] overflow-hidden rounded-3xl border border-line bg-surface">
               <img
-                src="/profile.png"
+                src={branding.profile}
                 alt={`Portrait of ${profile.name}`}
                 width="600"
                 height="600"

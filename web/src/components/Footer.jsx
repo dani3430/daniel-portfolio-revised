@@ -2,7 +2,7 @@ import Link from 'next/link'
 import SocialLinks from './SocialLinks'
 import DownloadCvButton from './DownloadCvButton'
 import { cv } from '@/data/cv'
-import { getSiteSettings } from '@/lib/content'
+import { getSiteSettings, getBranding } from '@/lib/content'
 
 const links = [
   { href: '/', label: 'Home' },
@@ -13,7 +13,7 @@ const links = [
 ]
 
 export default async function Footer() {
-  const settings = await getSiteSettings()
+ const [settings, branding] = await Promise.all([getSiteSettings(), getBranding()])
 
   return (
     <footer className="border-t border-line">
@@ -26,7 +26,7 @@ export default async function Footer() {
           >
             {/* Light-mode logo (hidden in dark mode) */}
             <img
-              src="/logo-full-light.png"
+              src={branding.logo_light}
               alt="Daniel Temesgen, Full-Stack Software Developer"
               width="640"
               height="422"
@@ -35,7 +35,7 @@ export default async function Footer() {
             />
             {/* Dark-mode logo (hidden in light mode) */}
             <img
-              src="/logo-full-dark.png"
+              src={branding.logo_dark}
               alt="Daniel Temesgen, Full-Stack Software Developer"
               width="640"
               height="422"
