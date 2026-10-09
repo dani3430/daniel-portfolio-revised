@@ -9,6 +9,7 @@ const items = [
   { href: '/admin/projects', label: 'Projects' },
   { href: '/admin/blog', label: 'Blog' },
   { href: '/admin/branding', label: 'Branding' },
+  { href: '/admin/cv', label: 'CV' },
 ]
 
 export default function AdminNav({ unreadCount = 0 }) {

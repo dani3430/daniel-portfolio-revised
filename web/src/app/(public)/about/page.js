@@ -3,7 +3,7 @@ import Skills from '@/components/Skills'
 import ContactCta from '@/components/ContactCta'
 import Reveal from '@/components/Reveal'
 import DownloadCvButton from '@/components/DownloadCvButton'
-import { getProfile, getEducation, getTimeline, getBranding } from '@/lib/content'
+   import { getProfile, getEducation, getTimeline, getBranding, getCurrentCv } from '@/lib/content'
 
 export const metadata = {
   title: 'About | Daniel Temesgen',
@@ -12,12 +12,13 @@ export const metadata = {
 }
 
 export default async function AboutPage() {
- const [profile, education, timeline, branding] = await Promise.all([
-    getProfile(),
-    getEducation(),
-   getTimeline(), 
-   getBranding(),
-  ])
+      const [profile, education, timeline, branding, cv] = await Promise.all([
+       getProfile(),
+       getEducation(),
+       getTimeline(),
+       getBranding(),
+       getCurrentCv(),
+     ])
 
   return (
     <>
@@ -48,7 +49,7 @@ export default async function AboutPage() {
                 <p key={text}>{text}</p>
               ))}
             </div>
-            <DownloadCvButton variant="primary" className="mt-8" />
+               <DownloadCvButton cv={cv} variant="primary" className="mt-8" />
           </div>
         </div>
       </section>

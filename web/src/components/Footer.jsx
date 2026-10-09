@@ -1,8 +1,7 @@
 import Link from 'next/link'
 import SocialLinks from './SocialLinks'
 import DownloadCvButton from './DownloadCvButton'
-import { cv } from '@/data/cv'
-import { getSiteSettings, getBranding } from '@/lib/content'
+import { getSiteSettings, getBranding, getCurrentCv } from '@/lib/content'
 
 const links = [
   { href: '/', label: 'Home' },
@@ -13,7 +12,11 @@ const links = [
 ]
 
 export default async function Footer() {
- const [settings, branding] = await Promise.all([getSiteSettings(), getBranding()])
+      const [settings, branding, cv] = await Promise.all([
+       getSiteSettings(),
+       getBranding(),
+       getCurrentCv(),
+     ])
 
   return (
     <footer className="border-t border-line">
@@ -61,7 +64,7 @@ export default async function Footer() {
                         ))}
             {(cv.published || process.env.NODE_ENV === 'development') && (
               <li>
-                <DownloadCvButton variant="link" />
+                   <DownloadCvButton cv={cv} variant="link" />
               </li>
             )}
           </ul>

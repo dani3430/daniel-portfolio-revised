@@ -1,4 +1,4 @@
-import { cv } from '@/data/cv'
+import { cv as fallbackCv } from '@/data/cv'
 
 // Colors for each look, so the button fits each place on the site
 const looks = {
@@ -30,7 +30,12 @@ function DownloadIcon() {
   )
 }
 
-export default function DownloadCvButton({ variant = 'secondary', compact = false, className = '' }) {
+export default function DownloadCvButton({
+  cv = fallbackCv,
+  variant = 'secondary',
+  compact = false,
+  className = '',
+}) {
   // Shape and size: plain links have none; buttons are smaller when compact
   const shape = variant === 'link' ? '' : compact ? 'rounded-lg px-4 py-2' : 'rounded-lg px-6 py-3'
 

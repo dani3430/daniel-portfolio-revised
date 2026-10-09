@@ -1,12 +1,12 @@
 import Navbar from '@/components/Navbar'
 import Footer from '@/components/Footer'
-import { getBranding } from '@/lib/content'
+   import { getBranding, getCurrentCv } from '@/lib/content'
 
 // Refresh all public pages from the database at most once a minute
 export const revalidate = 60
 
 export default async function PublicLayout({ children }) {
-  const branding = await getBranding()
+     const [branding, cv] = await Promise.all([getBranding(), getCurrentCv()])
 
   return (
     <div className="flex min-h-screen flex-col">
@@ -17,7 +17,7 @@ export default async function PublicLayout({ children }) {
       >
         Skip to content
       </a>
-      <Navbar marks={{ light: branding.mark_light, dark: branding.mark_dark }} />
+         <Navbar marks={{ light: branding.mark_light, dark: branding.mark_dark }} cv={cv} />
       <main id="main" className="flex-1">
         {children}
       </main>

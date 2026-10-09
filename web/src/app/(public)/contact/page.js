@@ -1,8 +1,7 @@
 import SectionHeading from '@/components/SectionHeading'
 import ContactForm from '@/components/ContactForm'
 import DownloadCvButton from '@/components/DownloadCvButton'
-import { getContactLinks } from '@/lib/content'
-import { cv } from '@/data/cv'
+import { getContactLinks, getCurrentCv } from '@/lib/content'
 
 export const metadata = {
   title: 'Contact | Daniel Temesgen',
@@ -11,7 +10,7 @@ export const metadata = {
 }
 
 export default async function ContactPage() {
-  const contactLinks = await getContactLinks()
+      const [contactLinks, cv] = await Promise.all([getContactLinks(), getCurrentCv()])
 
   return (
     <section aria-labelledby="contact-title">
@@ -51,7 +50,7 @@ export default async function ContactPage() {
             })}
             {(cv.published || process.env.NODE_ENV === 'development') && (
               <li>
-                <DownloadCvButton variant="secondary" className="w-full" />
+                 <DownloadCvButton cv={cv} variant="secondary" className="w-full" />
               </li>
             )}
           </ul>

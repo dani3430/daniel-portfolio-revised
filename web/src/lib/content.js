@@ -2,6 +2,7 @@
 // If the database cannot be reached, each function returns a safe fallback,
 // so the website keeps working instead of showing an error page.
 
+import { cache } from 'react'
 import { getSql } from '@/lib/db'
 import {
   projects as fallbackProjects,
@@ -9,6 +10,7 @@ import {
 } from '@/data/projects'
 import { contactLinks as fallbackContactLinks } from '@/data/contact'
 import { SLOTS, SLOT_KEYS } from '@/lib/brandingSlots'
+import { cv as fallbackCv } from '@/data/cv'
 
 async function safely(label, read, fallback) {
   try {
@@ -360,3 +362,32 @@ export function getBranding() {
     fallbackBranding,
   )
 }
+
+// ---------------- CV ----------------
+
+// The CV that is both current and published, or an unpublished placeholder.
+// cache() makes the layout and the page share one database read per visit.
+export const getCurrentCv = cache(() =>
+  safely(
+    'cv',
+    async (sql) => {
+      const rows = await sql`
+        SELECT m.url
+        FROM cv_files c
+        JOIN media m ON m.id = c.media_id
+        WHERE c.is_current AND c.published
+        LIMIT 1
+      `
+      if (rows.length === 0) return { ...fallbackCv, published: false }
+
+      const fileName = 'Daniel-Temesgen-CV'
+      return {
+        published: true,
+        // fl_attachment asks Cloudinary to download the file instead of opening it in the browser
+        url: rows[0].url.replace('/upload/', `/upload/fl_attachment:${fileName}/`),
+        fileName: `${fileName}.pdf`,
+      }
+    },
+    { ...fallbackCv, published: false },
+  ),
+)

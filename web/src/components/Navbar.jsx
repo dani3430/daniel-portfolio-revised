@@ -25,7 +25,10 @@ function linkClass(active) {
   }`
 }
 
-export default function Navbar({ marks = { light: '/mark-light.png', dark: '/mark-dark.png' } }) {
+   export default function Navbar({
+     marks = { light: '/mark-light.png', dark: '/mark-dark.png' },
+     cv,
+   }) {
   const [open, setOpen] = useState(false)
   const pathname = usePathname()
 
@@ -82,7 +85,7 @@ export default function Navbar({ marks = { light: '/mark-light.png', dark: '/mar
         <div className="flex shrink-0 items-center gap-2">
           {/* The wrapper is hidden below large screens, so the button never crowds the phone navbar */}
           <div className="hidden lg:block">
-            <DownloadCvButton variant="primary" compact />
+              <DownloadCvButton cv={cv} variant="primary" compact />
           </div>
 
           <ThemeToggle />
@@ -131,7 +134,7 @@ export default function Navbar({ marks = { light: '/mark-light.png', dark: '/mar
             )
           })}
           <li className="pt-3">
-            <DownloadCvButton variant="secondary" className="w-full" />
+               <DownloadCvButton cv={cv} variant="secondary" className="w-full" />
           </li>
         </ul>
       )}
