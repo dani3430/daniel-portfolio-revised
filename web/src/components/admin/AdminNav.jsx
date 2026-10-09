@@ -10,6 +10,10 @@ const items = [
   { href: '/admin/blog', label: 'Blog' },
   { href: '/admin/branding', label: 'Branding' },
   { href: '/admin/cv', label: 'CV' },
+  { href: '/admin/profile', label: 'Profile' },
+  { href: '/admin/skills', label: 'Skills' },
+  { href: '/admin/education', label: 'Education' },
+  { href: '/admin/timeline', label: 'Timeline' },
 ]
 
 export default function AdminNav({ unreadCount = 0 }) {
