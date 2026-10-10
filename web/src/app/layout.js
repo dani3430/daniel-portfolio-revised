@@ -1,7 +1,7 @@
 import { Inter, Space_Grotesk } from 'next/font/google'
 import './globals.css'
 import FlowerBackground from '@/components/FlowerBackground'
-import { getBranding } from '@/lib/content'
+   import { getBranding, getSiteSettings } from '@/lib/content'
 
 // Fonts are downloaded at build time and served from your own site (faster, more private)
 const inter = Inter({ subsets: ['latin'], variable: '--font-inter', display: 'swap' })
@@ -12,12 +12,10 @@ const spaceGrotesk = Space_Grotesk({
 })
 
 export async function generateMetadata() {
-  const branding = await getBranding()
-
+       const [branding, settings] = await Promise.all([getBranding(), getSiteSettings()])
   return {
-    title: 'Daniel Temesgen | Full-Stack Software Developer',
-    description:
-      'Personal portfolio of Daniel Temesgen, a full-stack software developer building modern web applications with React, Node.js and Express.',
+          title: settings.site.title,
+       description: settings.site.description,
     // Only set when you uploaded a favicon
     ...(branding.favicon ? { icons: { icon: branding.favicon } } : {}),
   }

@@ -83,6 +83,15 @@ export default function AboutContentForm({ initial }) {
         error={errors.goals}
         defaultValue={values.goals}
       />
+            <Field
+        id="principles"
+        name="principles"
+        label="Development philosophy"
+        hint="One principle per block. Put the title on the first line and the description on the next line. Leave a blank line between principles."
+        rows={12}
+        error={errors.principles}
+        defaultValue={values.principles}
+      />
       <Field
         id="interests"
         name="interests"

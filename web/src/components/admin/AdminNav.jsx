@@ -14,6 +14,8 @@ const items = [
   { href: '/admin/skills', label: 'Skills' },
   { href: '/admin/education', label: 'Education' },
   { href: '/admin/timeline', label: 'Timeline' },
+  { href: '/admin/links', label: 'Links' },
+  { href: '/admin/settings', label: 'Settings' },
 ]
 
 export default function AdminNav({ unreadCount = 0 }) {

@@ -90,6 +90,23 @@ function toLines(text) {
 function tooLong(items, max) {
   return items.some((item) => item.length > max)
 }
+// Each principle is a block separated by a blank line.
+// The first line is the title, and the lines after it are the description.
+function toPrinciples(text) {
+  const blocks = String(text ?? '')
+    .split(/\r?\n\s*\r?\n/)
+    .map((block) => block.trim())
+    .filter(Boolean)
+
+  const items = []
+  for (const block of blocks) {
+    const [title, ...rest] = block.split(/\r?\n/).map((line) => line.trim()).filter(Boolean)
+    const body = rest.join(' ')
+    if (!title || !body || title.length > 60 || body.length > 300) return { items: [], valid: false }
+    items.push({ title, text: body })
+  }
+  return { items, valid: items.length <= 8 }
+}
 
 export async function saveAboutAction(previousState, formData) {
   await requireAdmin()
@@ -97,11 +114,13 @@ export async function saveAboutAction(previousState, formData) {
   const raw = {
     journey: String(formData.get('journey') ?? ''),
     goals: String(formData.get('goals') ?? ''),
+    principles: String(formData.get('principles') ?? ''),
     interests: String(formData.get('interests') ?? ''),
   }
   const journey = toParagraphs(raw.journey)
   const goals = toLines(raw.goals)
   const interests = toLines(raw.interests)
+  const principles = toPrinciples(raw.principles)
 
   const errors = {}
   if (journey.length > 8 || tooLong(journey, 1500)) {
@@ -109,6 +128,10 @@ export async function saveAboutAction(previousState, formData) {
   }
   if (goals.length > 10 || tooLong(goals, 60)) {
     errors.goals = 'Use at most 10 goals, one per line, each under 60 characters.'
+  }
+    if (!principles.valid) {
+    errors.principles =
+      'Use at most 8 principles. Each needs a title (under 60 characters) on the first line and a description (under 300 characters) below it.'
   }
   if (interests.length > 12 || tooLong(interests, 80)) {
     errors.interests = 'Use at most 12 interests, one per line, each under 80 characters.'
@@ -122,6 +145,7 @@ export async function saveAboutAction(previousState, formData) {
       UPDATE profile
       SET journey = ${JSON.stringify(journey)}::jsonb,
           goals = ${JSON.stringify(goals)}::jsonb,
+          principles = ${JSON.stringify(principles.items)}::jsonb,
           interests = ${JSON.stringify(interests)}::jsonb,
           updated_at = now()
       WHERE id = 1
