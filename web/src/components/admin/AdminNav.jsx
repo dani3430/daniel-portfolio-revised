@@ -15,6 +15,7 @@ const items = [
   { href: '/admin/education', label: 'Education' },
   { href: '/admin/timeline', label: 'Timeline' },
   { href: '/admin/links', label: 'Links' },
+  { href: '/admin/categories', label: 'Categories' },
   { href: '/admin/settings', label: 'Settings' },
 ]
 
