@@ -1,7 +1,8 @@
 import { Inter, Space_Grotesk } from 'next/font/google'
 import './globals.css'
 import FlowerBackground from '@/components/FlowerBackground'
-   import { getBranding, getSiteSettings } from '@/lib/content'
+import { getBranding, getSiteSettings } from '@/lib/content'
+import { getSiteUrl } from '@/lib/site'
 
 // Fonts are downloaded at build time and served from your own site (faster, more private)
 const inter = Inter({ subsets: ['latin'], variable: '--font-inter', display: 'swap' })
@@ -14,6 +15,8 @@ const spaceGrotesk = Space_Grotesk({
 export async function generateMetadata() {
        const [branding, settings] = await Promise.all([getBranding(), getSiteSettings()])
   return {
+      // Lets relative addresses (such as /about) become full addresses in search and share previews
+       metadataBase: new URL(getSiteUrl()),
           title: settings.site.title,
        description: settings.site.description,
     // Only set when you uploaded a favicon

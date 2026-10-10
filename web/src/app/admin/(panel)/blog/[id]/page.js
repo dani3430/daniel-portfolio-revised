@@ -4,6 +4,7 @@ import { requireAdmin } from '@/lib/auth'
 import { getSql } from '@/lib/db'
 import PostForm from '@/components/admin/PostForm'
 import { updatePostAction } from '../actions'
+import CoverImageUploader from '@/components/admin/CoverImageUploader'
 
 export const metadata = {
   title: 'Edit post | Admin',
@@ -22,7 +23,7 @@ export default async function EditPostPage({ params }) {
   const [posts, categories] = await Promise.all([
     sql`
       SELECT p.id, p.slug, p.title, p.excerpt, p.content, p.category_id, p.featured, p.status,
-             p.published_at, p.seo_title, p.seo_description,
+             p.published_at, p.seo_title, p.seo_description, m.url AS cover_url,
              COALESCE(
                (SELECT string_agg(t.name, ', ' ORDER BY t.name)
                 FROM post_tags pt JOIN tags t ON t.id = pt.tag_id
@@ -30,6 +31,7 @@ export default async function EditPostPage({ params }) {
                ''
              ) AS tags
       FROM posts p
+      LEFT JOIN media m ON m.id = p.cover_media_id
       WHERE p.id = ${id}
     `,
     sql`SELECT id, name FROM categories WHERE kind = 'post' ORDER BY sort_order, id`,
@@ -62,6 +64,12 @@ export default async function EditPostPage({ params }) {
       <h1 className="mt-6 mb-8 break-words font-display text-3xl font-bold text-fg">
         Edit: {post.title}
       </h1>
+               <CoverImageUploader
+           kind="post"
+           itemId={String(post.id)}
+           currentUrl={post.cover_url ?? ''}
+           itemTitle={post.title}
+         />
       <PostForm
         action={updatePostAction}
         initial={initial}

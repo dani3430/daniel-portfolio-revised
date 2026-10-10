@@ -2,6 +2,7 @@ import Link from 'next/link'
 import { notFound } from 'next/navigation'
 import { getPost } from '@/lib/content'
 import { formatDate } from '@/utils/formatDate'
+import { buildMetadata } from '@/lib/seo'
 
 // Refresh each post page from the database at most once a minute
 export const revalidate = 60
@@ -12,10 +13,14 @@ export async function generateMetadata({ params }) {
   const post = await getPost(slug)
   if (!post) return {}
 
-  return {
-    title: `${post.title} | Daniel Temesgen`,
-    description: post.excerpt,
-  }
+           return buildMetadata({
+       title: `${post.title} | Daniel Temesgen`,
+       description: post.excerpt,
+       path: `/blog/${slug}`,
+       image: post.image,
+       type: 'article',
+       publishedTime: post.date,
+     })
 }
 
 export default async function BlogPostPage({ params }) {

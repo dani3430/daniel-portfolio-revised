@@ -1,12 +1,16 @@
 import SectionHeading from '@/components/SectionHeading'
 import ProjectsExplorer from '@/components/ProjectsExplorer'
 import { getProjects, getProjectCategories } from '@/lib/content'
+import { buildMetadata } from '@/lib/seo'
 
-export const metadata = {
-  title: 'Projects | Daniel Temesgen',
-  description:
-    'Web applications, tools and designs created by Daniel Temesgen, a full-stack software developer.',
-}
+   export function generateMetadata() {
+     return buildMetadata({
+       title: 'Projects | Daniel Temesgen',
+       description:
+         'Web applications, tools and designs created by Daniel Temesgen, a full-stack software developer.',
+       path: '/projects',
+     })
+   }
 
 // Refresh this page from the database at most once a minute
 export const revalidate = 60

@@ -3,13 +3,17 @@ import Skills from '@/components/Skills'
 import ContactCta from '@/components/ContactCta'
 import Reveal from '@/components/Reveal'
 import DownloadCvButton from '@/components/DownloadCvButton'
-   import { getProfile, getEducation, getTimeline, getBranding, getCurrentCv } from '@/lib/content'
+import { getProfile, getEducation, getTimeline, getBranding, getCurrentCv } from '@/lib/content'
+import { buildMetadata } from '@/lib/seo'
 
-export const metadata = {
-  title: 'About | Daniel Temesgen',
-  description:
-    'The story of Daniel Temesgen: a self-taught full-stack developer who combines an Agribusiness and Value Chain background with modern web development.',
-}
+   export function generateMetadata() {
+     return buildMetadata({
+       title: 'About | Daniel Temesgen',
+       description:
+         'The story of Daniel Temesgen: a self-taught full-stack developer who combines an Agribusiness and Value Chain background with modern web development.',
+       path: '/about',
+     })
+   }
 
 export default async function AboutPage() {
       const [profile, education, timeline, branding, cv] = await Promise.all([

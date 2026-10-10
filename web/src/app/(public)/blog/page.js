@@ -1,13 +1,16 @@
 import SectionHeading from '@/components/SectionHeading'
 import BlogExplorer from '@/components/BlogExplorer'
 import { getPosts, getBlogCategories } from '@/lib/content'
+import { buildMetadata } from '@/lib/seo'
 
-export const metadata = {
-  title: 'Blog | Daniel Temesgen',
-  description:
-    'Articles and notes on web development and the learning journey of Daniel Temesgen, a full-stack software developer.',
-}
-
+      export function generateMetadata() {
+     return buildMetadata({
+       title: 'Blog | Daniel Temesgen',
+       description:
+         'Articles and notes on web development and the learning journey of Daniel Temesgen, a full-stack software developer.',
+       path: '/blog',
+     })
+   }
 // Refresh this page from the database at most once a minute
 export const revalidate = 60
 

@@ -2,12 +2,16 @@ import SectionHeading from '@/components/SectionHeading'
 import ContactForm from '@/components/ContactForm'
 import DownloadCvButton from '@/components/DownloadCvButton'
 import { getContactLinks, getCurrentCv } from '@/lib/content'
+import { buildMetadata } from '@/lib/seo'
 
-export const metadata = {
-  title: 'Contact | Daniel Temesgen',
-  description:
-    'Get in touch with Daniel Temesgen, a full-stack software developer, about projects, job opportunities or collaboration.',
-}
+      export function generateMetadata() {
+     return buildMetadata({
+       title: 'Contact | Daniel Temesgen',
+       description:
+         'Get in touch with Daniel Temesgen, a full-stack software developer, about projects, job opportunities or collaboration.',
+       path: '/contact',
+     })
+   }
 
 export default async function ContactPage() {
       const [contactLinks, cv] = await Promise.all([getContactLinks(), getCurrentCv()])
