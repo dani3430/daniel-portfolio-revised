@@ -10,9 +10,15 @@ function wait(ms) {
 // Only network failures are retried. Database errors and wrong passwords are not.
 neonConfig.fetchFunction = async (...args) => {
   for (let attempt = 1; ; attempt++) {
+    const started = Date.now()
     try {
-      return await fetch(...args)
+      const response = await fetch(...args)
+      const took = Date.now() - started
+      if (took > 2000) console.warn(`[db] slow request: ${took}ms (attempt ${attempt})`)
+      return response
     } catch (error) {
+      const code = error?.cause?.code || error?.message
+      console.warn(`[db] network error after ${Date.now() - started}ms (attempt ${attempt}): ${code}`)
       if (attempt >= MAX_ATTEMPTS) throw error
       await wait(300 * attempt)
     }

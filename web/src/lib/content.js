@@ -12,7 +12,12 @@ import { contactLinks as fallbackContactLinks } from '@/data/contact'
 import { SLOTS, SLOT_KEYS } from '@/lib/brandingSlots'
 import { cv as fallbackCv } from '@/data/cv'
 
-async function safely(label, read, fallback) {
+// One small memory per page visit. A page often needs the same content several times
+// (the layout, the header, the footer and the page itself all need your branding),
+// so the database is asked only once and the answer is shared.
+const requestMemory = cache(() => new Map())
+
+async function readSafely(label, read, fallback) {
   try {
     return await read(getSql())
   } catch (error) {
@@ -20,6 +25,14 @@ async function safely(label, read, fallback) {
     console.error(`Could not load ${label} from the database:`, error)
     return fallback
   }
+}
+
+function safely(label, read, fallback, key = label) {
+  const memory = requestMemory()
+  if (!memory.has(key)) {
+    memory.set(key, readSafely(label, read, fallback))
+  }
+  return memory.get(key)
 }
 
 // ---------------- PROJECTS ----------------
@@ -127,6 +140,7 @@ export function getPost(slug) {
       return rows.length > 0 ? toPost(rows[0]) : null
     },
     null,
+    `post:${slug}`,
   )
 }
 
