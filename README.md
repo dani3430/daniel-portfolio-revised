@@ -140,13 +140,13 @@ The project is designed to run on free tiers. Free tiers change, so check each p
 
 ### Prerequisites
 
-- Node.js 20.9 or newer
+- Node.js 22 or newer
 - A free account at Neon, Cloudinary and Telegram, and a Gmail account (see [Service setup](#service-setup))
 
 ### 1. Install
 
 ```bash
-git clone <your-repository-url>
+git clone https://github.com/dani3430/daniel-portfolio-revised
 cd daniel-portfolio-revised/web
 npm install
 ```
